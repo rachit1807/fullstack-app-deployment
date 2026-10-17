@@ -34,4 +34,6 @@ Render reports a live deployment. `/api/health` returns HTTP 200 and `{"status":
 
 ## Browser automation
 
+**All three automated workflows passed in GitHub Actions:** API authentication/ownership/persistence, desktop task workflow/theme persistence, and mobile registration/navigation/overflow. [Successful run](https://github.com/rachit1807/fullstack-app-deployment/actions/runs/39016063580).
+
 The repository includes desktop and mobile Playwright workflows, and GitHub Actions runs them in Linux. Local automated browser launch was blocked by macOS sandbox restrictions, so live interface checks were performed through the available browser. API automation runs locally without launching a browser.

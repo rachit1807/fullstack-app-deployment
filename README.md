@@ -126,6 +126,13 @@ The current deployment uses a dedicated `tasknest` schema in an existing Postgre
 
 Run `npm test` to execute the API and desktop/mobile browser workflows against an isolated test database. Install the browser once with `npx playwright install chromium`. GitHub Actions also builds and checks the project on pushes and pull requests. See the [verification notes](docs/verification.md) for deployment checks and recorded results.
 
+<details>
+<summary>Hosting proof</summary>
+
+![Render deployment live](docs/screenshots/hosting.png)
+
+</details>
+
 ## Security and scope
 
 Passwords are hashed with bcrypt. Task queries use parameters and include the signed-in account ID. Sessions live in PostgreSQL; production cookies use HTTPS, HTTP-only, and SameSite protections. Mutating browser requests reject foreign origins. Authentication is rate limited. User-supplied text is escaped before display.

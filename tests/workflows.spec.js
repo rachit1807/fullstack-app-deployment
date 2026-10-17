@@ -28,6 +28,7 @@ test("API authentication, ownership, validation, persistence, and logout", async
   });
   expect(created.status()).toBe(201);
   const task = await created.json();
+  task.due_date = task.due_date?.slice(0, 10);
   expect((await a.get("/api/tasks")).ok()).toBeTruthy();
   expect(
     (
@@ -88,7 +89,7 @@ test("desktop task workflow, filtering, editing, board, and theme persistence", 
   const c = account();
   await page.getByLabel("Your name").fill(c.name);
   await page.getByLabel("Email address").fill(c.email);
-  await page.getByLabel("Password", { exact: true }).fill(c.password);
+  await page.locator('[name="password"]').fill(c.password);
   await page
     .getByRole("button", { name: "Create account", exact: true })
     .click();
@@ -146,7 +147,7 @@ test("mobile registration, modal, navigation, and no horizontal overflow", async
   const c = account();
   await page.getByLabel("Your name").fill(c.name);
   await page.getByLabel("Email address").fill(c.email);
-  await page.getByLabel("Password", { exact: true }).fill(c.password);
+  await page.locator('[name="password"]').fill(c.password);
   await page
     .getByRole("button", { name: "Create account", exact: true })
     .click();

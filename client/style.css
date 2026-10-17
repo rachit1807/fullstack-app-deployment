@@ -1459,3 +1459,63 @@ dialog::backdrop {
     transition: none !important;
   }
 }
+
+/* Keep project navigation available on shorter laptop screens. */
+aside {
+  overflow-y: auto;
+}
+.project-nav {
+  flex-shrink: 0;
+}
+.nav-overlay {
+  position: fixed;
+  inset: 0;
+  background: #17132766;
+  z-index: 19;
+}
+.nav-overlay[hidden] {
+  display: none;
+}
+.task-check {
+  position: relative;
+}
+.task-check::before {
+  content: "";
+  position: absolute;
+  inset: -10px;
+}
+@media (max-height: 850px) {
+  .progress-card {
+    display: none;
+  }
+  .workspace-label {
+    margin: 25px 0 20px;
+  }
+}
+@media (max-width: 600px) {
+  label input,
+  label select,
+  label textarea {
+    font-size: 16px;
+  }
+  .form-grid input,
+  .form-grid select {
+    font-size: 16px;
+  }
+  .task-row .status-select {
+    min-height: 36px;
+  }
+  .icon-btn {
+    min-height: 40px;
+    min-width: 40px;
+  }
+  .task-row .delete {
+    min-width: 28px;
+  }
+  .nav-item {
+    min-height: 44px;
+  }
+  .toolbar select {
+    min-height: 42px;
+  }
+}

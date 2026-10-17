@@ -20,7 +20,7 @@ if (process.env.NODE_ENV === "test") {
   await db.exec(`CREATE SCHEMA ${schema}; SET search_path TO ${schema}`);
   pool = {
     query: async (sql, params) => {
-      if (!params && sql.includes(";")) {
+      if (!params?.length && sql.includes(";")) {
         const results = await db.exec(sql);
         return results.at(-1);
       }
@@ -103,13 +103,11 @@ app.post(
       email.length > 254 ||
       typeof password !== "string" ||
       password.length < 8 ||
-      password.length > 72
+      Buffer.byteLength(password, "utf8") > 72
     )
-      return res
-        .status(400)
-        .json({
-          error: "Use a valid email and a password of 8–72 characters.",
-        });
+      return res.status(400).json({
+        error: "Use a valid email and a password of 8–72 characters.",
+      });
     let user;
     if (action === "register") {
       if (typeof name !== "string" || !name.trim() || name.length > 80)
@@ -197,7 +195,11 @@ function fields(b) {
     project.length > 50 ||
     !["low", "medium", "high"].includes(priority) ||
     !["todo", "progress", "done"].includes(status) ||
-    (due_date && !/^\d{4}-\d{2}-\d{2}$/.test(due_date))
+    (due_date &&
+      (typeof due_date !== "string" ||
+        !/^\d{4}-\d{2}-\d{2}$/.test(due_date) ||
+        !Number.isFinite(Date.parse(due_date)) ||
+        new Date(due_date).toISOString().slice(0, 10) !== due_date))
   )
     return null;
   return [
@@ -260,6 +262,10 @@ app.use("/api", (req, res) =>
 app.use(express.static(resolve("dist")));
 app.get("/{*path}", (req, res) => res.sendFile(resolve("dist/index.html")));
 app.use((e, req, res, next) => {
+  if (e.type === "entity.parse.failed")
+    return res.status(400).json({ error: "Invalid JSON request." });
+  if (e.type === "entity.too.large")
+    return res.status(413).json({ error: "Request is too large." });
   console.error(e.message);
   res.status(500).json({ error: "Something went wrong. Please try again." });
 });

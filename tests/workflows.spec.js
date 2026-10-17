@@ -105,11 +105,9 @@ test("desktop task workflow, filtering, editing, board, and theme persistence", 
   await page.getByLabel("Your name").fill(c.name);
   await page.getByLabel("Email address").fill(c.email);
   await page.locator('[name="password"]').fill(c.password);
-  await page
-    .getByRole("button", { name: "Create account", exact: true })
-    .click();
+  await page.getByRole("button", { name: /^Create account/ }).click();
   await expect(
-    page.getByRole("heading", { name: "Let’s make things happen." }),
+    page.getByRole("heading", { name: /Let’s make things happen/ }),
   ).toBeVisible();
   await page.getByRole("button", { name: /New task/ }).click();
   await page.getByLabel("Task name").fill("Prepare product demo");
@@ -163,9 +161,7 @@ test("mobile registration, modal, navigation, and no horizontal overflow", async
   await page.getByLabel("Your name").fill(c.name);
   await page.getByLabel("Email address").fill(c.email);
   await page.locator('[name="password"]').fill(c.password);
-  await page
-    .getByRole("button", { name: "Create account", exact: true })
-    .click();
+  await page.getByRole("button", { name: /^Create account/ }).click();
   await expect(page.locator("main")).toBeVisible();
   expect(
     await page.evaluate(

@@ -1,0 +1,35 @@
+{
+  "name": "tasknest",
+  "version": "1.0.0",
+  "description": "A thoughtful workspace for everyday tasks",
+  "scripts": {
+    "dev": "node --watch server/index.js",
+    "start": "node server/index.js",
+    "build": "vite build client --outDir ../dist --emptyOutDir",
+    "test": "playwright test",
+    "format": "prettier --write client server tests *.json *.md docs/*.md"
+  },
+  "keywords": [],
+  "author": "Rachit Tripathi",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "connect-pg-simple": "^10.0.0",
+    "dotenv": "^18.0.8",
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.7.1",
+    "express-session": "^1.19.0",
+    "helmet": "^8.3.0",
+    "pg": "^8.23.1"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.10",
+    "@playwright/test": "^1.64.1",
+    "prettier": "^3.9.10",
+    "vite": "^8.3.4"
+  }
+}

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="TaskNest — a calmer place to plan, focus, and get things done."
+    />
+    <meta name="theme-color" content="#f8f9fc" />
+    <title>TaskNest — Make room for what matters</title>
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="stylesheet" href="/style.css" />
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <dialog id="task-dialog">
+      <form id="task-form">
+        <div class="modal-head">
+          <div>
+            <span class="eyebrow">MAKE IT HAPPEN</span>
+            <h2 id="dialog-title">New task</h2>
+          </div>
+          <button
+            type="button"
+            class="icon-btn"
+            id="close-modal"
+            aria-label="Close"
+          >
+            ×
+          </button>
+        </div>
+        <label
+          >Task name<input
+            name="title"
+            required
+            maxlength="160"
+            placeholder="What would you like to get done?" /></label
+        ><label
+          >Description<textarea
+            name="description"
+            maxlength="2000"
+            rows="3"
+            placeholder="Add a little context…"
+          ></textarea>
+        </label>
+        <div class="form-grid">
+          <label
+            >Project<input
+              name="project"
+              value="Personal"
+              required
+              maxlength="50"
+              list="projects" /></label
+          ><label>Due date<input name="due_date" type="date" /></label
+          ><label
+            >Priority<select name="priority">
+              <option value="low">Low</option>
+              <option value="medium" selected>Medium</option>
+              <option value="high">High</option>
+            </select></label
+          ><label
+            >Status<select name="status">
+              <option value="todo">To do</option>
+              <option value="progress">In progress</option>
+              <option value="done">Completed</option>
+            </select></label
+          >
+        </div>
+        <datalist id="projects"></datalist>
+        <p class="form-error" id="task-error" role="alert"></p>
+        <button class="primary" type="submit">Save task <span>↗</span></button>
+      </form>
+    </dialog>
+    <div id="toast" role="status"></div>
+  </body>
+</html>

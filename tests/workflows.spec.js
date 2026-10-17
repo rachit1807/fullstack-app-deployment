@@ -38,6 +38,21 @@ test("API authentication, ownership, validation, persistence, and logout", async
   expect(
     (
       await a.post("/api/tasks", {
+        data: { title: "Invalid date", due_date: "2026-02-31" },
+      })
+    ).status(),
+  ).toBe(400);
+  expect(
+    (
+      await a.post("/api/tasks", {
+        data: "{broken",
+        headers: { "Content-Type": "application/json" },
+      })
+    ).status(),
+  ).toBe(400);
+  expect(
+    (
+      await a.post("/api/tasks", {
         headers: { origin: "https://foreign.example" },
         data: { title: "Blocked" },
       })
@@ -96,13 +111,13 @@ test("desktop task workflow, filtering, editing, board, and theme persistence", 
   await expect(
     page.getByRole("heading", { name: "Let’s make things happen." }),
   ).toBeVisible();
-  await page.getByRole("button", { name: "New task", exact: true }).click();
+  await page.getByRole("button", { name: /New task/ }).click();
   await page.getByLabel("Task name").fill("Prepare product demo");
   await page
     .getByLabel("Description", { exact: true })
     .fill("Check all the details");
   await page.getByLabel("Project", { exact: true }).fill("Launch");
-  await page.getByLabel("Priority", { exact: true }).selectOption("high");
+  await page.locator('#task-form [name="priority"]').selectOption("high");
   await page.getByRole("button", { name: "Save task" }).click();
   await expect(
     page.getByText("Prepare product demo", { exact: true }),
@@ -157,7 +172,7 @@ test("mobile registration, modal, navigation, and no horizontal overflow", async
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBeTruthy();
-  await page.getByRole("button", { name: "New task", exact: true }).click();
+  await page.getByRole("button", { name: /New task/ }).click();
   await expect(page.getByRole("dialog")).toBeVisible();
   await page.getByLabel("Task name").fill("A mobile task");
   await page.getByRole("button", { name: "Save task" }).click();

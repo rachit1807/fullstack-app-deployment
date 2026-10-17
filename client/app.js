@@ -229,6 +229,7 @@ function row(t) {
 }
 function drawTasks() {
   const f = filtered();
+  $(".section-heading h2 span").textContent = f.length;
   $("#task-content").innerHTML = !f.length
     ? `<div class="empty-state"><div>✦</div><h3>${tasks.length ? "Nothing here just yet" : "A clear space. A fresh start."}</h3><p>${query || priority !== "all" ? "Try another search or filter." : "Add a task and give your next idea a place to grow."}</p><button class="secondary" id="empty-add">+ Create a task</button></div>`
     : layout === "board"

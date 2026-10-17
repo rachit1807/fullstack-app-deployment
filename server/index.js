@@ -14,10 +14,19 @@ if (!/^[a-z][a-z0-9_]*$/.test(schema))
   throw new Error("Invalid database schema");
 if (!process.env.SESSION_SECRET) throw new Error("SESSION_SECRET is required");
 let pool;
-if (process.env.NODE_ENV === "test") {
+if (
+  process.env.NODE_ENV === "test" ||
+  (!production && process.env.LOCAL_DATABASE_PATH)
+) {
   const { PGlite } = await import("@electric-sql/pglite");
-  const db = new PGlite();
-  await db.exec(`CREATE SCHEMA ${schema}; SET search_path TO ${schema}`);
+  const db = new PGlite(
+    process.env.NODE_ENV === "test"
+      ? undefined
+      : process.env.LOCAL_DATABASE_PATH,
+  );
+  await db.exec(
+    `CREATE SCHEMA IF NOT EXISTS ${schema}; SET search_path TO ${schema}`,
+  );
   pool = {
     query: async (sql, params) => {
       if (!params?.length && sql.includes(";")) {

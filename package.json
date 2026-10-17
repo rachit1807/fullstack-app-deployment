@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "description": "A thoughtful workspace for everyday tasks",
   "scripts": {
-    "dev": "node --watch server/index.js",
+    "dev": "node server/index.js",
     "start": "node server/index.js",
     "build": "vite build client --outDir ../dist --emptyOutDir",
     "test": "playwright test",
-    "format": "prettier --write client server tests *.json *.md docs/*.md"
+    "format": "prettier --write client server tests *.json *.md docs/*.md",
+    "dev:watch": "node --watch server/index.js"
   },
   "keywords": [],
   "author": "Rachit Tripathi",

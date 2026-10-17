@@ -11,6 +11,7 @@ A calm, responsive workspace for tasks, projects, and everyday progress.
 [Live application](https://tasknest-rachit.onrender.com) · [Deployment guide](docs/deployment-guide.md) · [API reference](docs/api.md)
 
 ![Node.js](https://img.shields.io/badge/Node.js-22%2B-43853D?logo=nodedotjs&logoColor=white)
+![Checks](https://github.com/rachit1807/fullstack-app-deployment/actions/workflows/verify.yml/badge.svg)
 ![License](https://img.shields.io/badge/License-MIT-7761d7)
 
 </div>
@@ -57,7 +58,13 @@ TaskNest brings personal task management into one focused workspace. Create a pr
 
 <p align="center"><img src="docs/screenshots/mobile.png" alt="TaskNest mobile workspace" width="300" /></p>
 
-## Run locally
+## Quick local preview
+
+For a local workspace without installing a PostgreSQL server, install the dependencies, build the interface, and use a `.env` file with `LOCAL_DATABASE_PATH=.tasknest-data`, a random `SESSION_SECRET`, `NODE_ENV=development`, and `PORT=3038`. Then run `npm run dev` and open [localhost:3038](http://localhost:3038).
+
+This preview uses PGlite, an embedded PostgreSQL-compatible development database. Its data stays in the ignored `.tasknest-data/` folder across restarts. The deployed app uses managed PostgreSQL. Never enable this preview setting in production.
+
+## Run locally with PostgreSQL
 
 **Requirements:** Node.js 22 or later, npm, and PostgreSQL 16 or later.
 
@@ -75,7 +82,7 @@ npm run build
 npm run dev
 ```
 
-Open [localhost:3000](http://localhost:3000). The server creates its schema and tables on startup. After changing the interface, run `npm run build` and refresh the page. `npm run dev` watches server files; it is not a frontend development server.
+Open [localhost:3000](http://localhost:3000). The server creates its schema and tables on startup. After changing the interface, run `npm run build` and refresh the page. `npm run dev` starts the application. Use `npm run dev:watch` for optional server file watching; neither command provides frontend hot reload.
 
 ### Environment variables
 
@@ -114,6 +121,10 @@ The frontend and backend share one Render web service and one origin. Express se
 See the [deployment guide](docs/deployment-guide.md) for hosting settings, database configuration, verification, and troubleshooting.
 
 The current deployment uses a dedicated `tasknest` schema in an existing PostgreSQL instance. This separates table names and application data, while compute, credentials, capacity, and availability remain shared. It is not a separate database or a database permission boundary. A separate database and restricted database role are recommended for an independent production deployment.
+
+## Verification
+
+Run `npm test` to execute the API and desktop/mobile browser workflows against an isolated test database. Install the browser once with `npx playwright install chromium`. GitHub Actions also builds and checks the project on pushes and pull requests. See the [verification notes](docs/verification.md) for deployment checks and recorded results.
 
 ## Security and scope
 

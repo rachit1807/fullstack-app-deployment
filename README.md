@@ -120,7 +120,7 @@ The frontend and backend share one Render web service and one origin. Express se
 
 See the [deployment guide](docs/deployment-guide.md) for hosting settings, database configuration, verification, and troubleshooting.
 
-The current deployment uses a dedicated `tasknest` schema in an existing PostgreSQL instance. This separates table names and application data, while compute, credentials, capacity, and availability remain shared. It is not a separate database or a database permission boundary. A separate database and restricted database role are recommended for an independent production deployment.
+The current deployment uses its own Neon PostgreSQL 16 project in Singapore, with a dedicated `tasknest` database and database role. The `tasknest` schema contains users, tasks and persistent sessions. It no longer shares the original Render database. The production branch has no scheduled expiry; free-plan usage limits still apply. Keep independent backups and monitor usage.
 
 ## Verification
 

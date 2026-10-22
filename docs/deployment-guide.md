@@ -20,11 +20,11 @@ The frontend and API run on the same origin. No frontend API key is needed. CORS
 
 ## 2. Connect PostgreSQL
 
-Use a PostgreSQL instance in the same Render region as the web service. Set `DATABASE_URL` to its **internal** connection string. Keep this value in Render environment settings, never in the README, source, screenshots, or Git history.
+Use the dedicated Neon PostgreSQL 16 project in Singapore. Set `DATABASE_URL` to its **direct, unpooled TLS** connection string with `sslmode=require`. TaskNest sets a session search path, so use the direct endpoint rather than the transaction pooler. Keep this value in Render environment settings, never in the README, source, screenshots, or Git history.
 
-For this deployment, an existing PostgreSQL instance is reused with `DATABASE_SCHEMA=tasknest`. The app creates tables only in that schema. TeamHub’s tables are not used or migrated. Shared database credentials are not a security boundary between apps; use a dedicated database/role for stronger isolation.
+This deployment has its own Neon project, `tasknest` database and role, with `DATABASE_SCHEMA=tasknest`. Users, tasks and database-backed sessions were copied together. Other projects use separate databases.
 
-The Render free database currently expires **9 November 2026**. Both apps depend on this instance. Upgrade or migrate before expiry to preserve service and data. Free web services can sleep when idle, so the first request may take longer.
+The Neon production database has **no scheduled expiry**. Free-plan compute, storage, transfer and recovery limits apply. Keep independent backups and review usage; perpetual free service is not guaranteed. Free web services can sleep when idle, so the first request may take longer.
 
 ## 3. Create the web service
 
@@ -40,13 +40,13 @@ The Render free database currently expires **9 November 2026**. Both apps depend
 | Health check  | `/api/health`                           |
 | Auto-deploy   | On, from `main`                         |
 
-`render.yaml` provides the reproducible web-service settings. It intentionally asks for `DATABASE_URL` rather than creating another database. The existing free database allowance is already in use.
+`render.yaml` provides the reproducible web-service settings. It intentionally asks for `DATABASE_URL` rather than creating another database. Supply the dedicated Neon database URL securely in Render.
 
 ## 4. Set environment variables
 
 - `NODE_ENV=production`
 - `DATABASE_SCHEMA=tasknest`
-- `DATABASE_URL`: internal PostgreSQL URL from Render
+- `DATABASE_URL`: direct TLS PostgreSQL URL from Neon
 - `SESSION_SECRET`: a unique random secret (at least 32 bytes)
 
 Render provides `PORT`. The app binds to `0.0.0.0` and uses that port. Secure cookies require the public HTTPS URL; Express trusts the Render proxy.
@@ -73,11 +73,11 @@ Screenshots of the running application and hosting result belong in `docs/screen
 | Symptom                                  | Check                                                                                                |
 | ---------------------------------------- | ---------------------------------------------------------------------------------------------------- |
 | Service fails at startup                 | Required environment variables and database availability                                             |
-| Database hostname cannot resolve locally | Internal Render URLs work within Render; use an authorized external connection for local development |
+| Database hostname cannot resolve locally | Use the direct Neon hostname and verify network access and TLS |
 | Login succeeds but session disappears    | HTTPS, `NODE_ENV`, proxy configuration, and cookie blocking                                          |
 | Blank page after changes                 | Build assets with `npm run build`; confirm `dist/index.html` exists                                  |
 | Slow initial request                     | Free service cold start                                                                              |
-| Database errors after November 9         | Check database expiry and migration/upgrade status                                                   |
+| Database unavailable         | Check Neon compute status, credentials, quota usage and TLS settings                                                   |
 
 ## Automated verification
 
